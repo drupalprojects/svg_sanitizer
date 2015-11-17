@@ -1,0 +1,5 @@
+name = SVG Sanitizer
+description = "Makes the SVG Sanitizer library available to Drupal."
+core = 7.x
+package = "Media"
+dependencies[] = libraries

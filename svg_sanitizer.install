@@ -1,0 +1,36 @@
+<?php
+/**
+ * @file
+ * Install file for quojs module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function svg_sanitizer_requirements($phase) {
+  if ($phase == 'runtime') {
+    $library = libraries_load('svg-sanitizer');
+    $t = get_t();
+
+    if (empty($library['loaded'])) {
+      return array(
+        'phpexcel' => array(
+          'title' => $t('SVG Sanitizer'),
+          'value' => $t('Not Installed'),
+          'description' => $t('Please install the example library %url.', array('%url' => SVG_SANITIZER_URL)),
+          'severity' => REQUIREMENT_ERROR,
+        ),
+      );
+    }
+    else {
+      return array(
+        'phpexcel' => array(
+          'title' => $t('SVG Sanitizer'),
+          'value' => $t('SVG Sanitizer installed'),
+          'severity' => REQUIREMENT_OK,
+        ),
+      );
+    }
+  }
+  return array();
+}

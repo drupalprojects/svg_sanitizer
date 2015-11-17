@@ -1,0 +1,111 @@
+<?php
+/**
+ * @file
+ * Wrapper to help include svg-sanitizer library.
+ */
+
+// svg_sanitizer global variables
+define('SVG_SANITIZER_URL', 'https://github.com/darylldoyle/svg-sanitizer');
+
+/**
+ * Impliments hook_libraries_info
+ */
+function svg_sanitizer_libraries_info() {
+  // This array key lets Libraries API search for 'sites/all/libraries/example'
+  // directory, which should contain the entire, original extracted library.
+  $libraries['svg-sanitizer'] = array(
+    // Only used in administrative UI of Libraries API.
+    'name' => 'SVG Sanitizer',
+    'vendor url' => SVG_SANITIZER_URL,
+    'download url' => SVG_SANITIZER_URL,
+    // Optional: Register files to auto-load for your module. All files must be
+    // keyed by module, and follow the syntax of the 'files' property.
+    'path' => 'src',
+    'files' => array(
+      'php' => array(
+        'Sanitizer.php',
+        'data/AttributeInterface.php',
+        'data/TagInterface.php',
+        'data/AllowedAttributes.php',
+        'data/AllowedTags.php',
+      ),
+    ),
+  );
+
+  return $libraries;
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function svg_sanitizer_field_formatter_info() {
+  return array(
+    'svg_sanitizer' => array(
+      'label' => t('SVG Sanitizer'),
+      'field types' => array('image', 'file'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function svg_sanitizer_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+  $settings = $display['settings'];
+
+  switch ($display['type']) {
+    case 'svg_sanitizer':
+      foreach ($items as $delta => $item) {
+        // create 
+        $svg_path = file_create_url($item['uri']);
+        $svg = file_get_contents($svg_path);
+        $svg_clean = _svg_sanitizer_sanitize($svg);
+
+        $element[$delta] = array(
+          '#type' => 'markup',
+          '#markup' => $svg_clean,
+        );
+      }
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_page_build().
+ */
+function svg_sanitizer_page_build(&$page) {
+  $svg = drupal_get_path('module', 'svg_sanitizer') . '/example.svg';
+  $dirty_svg = file_get_contents($svg);
+  $clean_svg = _svg_sanitizer_sanitize($dirty_svg);
+}
+
+/**
+ * Simple API function which will generate an XLS file and
+ * save it in $path.
+ *
+ * @param string $svg
+ *    The xml contents of an svg that you would like to sanitize.
+ *
+ * @return string
+ *    The xml contents of an svg that has been stripped of harmful
+ *    contents.
+ */
+function _svg_sanitizer_sanitize($svg) {
+  // @todo: I have to include the files here because they aren't being loaded
+  // in svg_sanitizer_libraries_info() for some reason
+  $library = libraries_load('svg-sanitizer');
+  foreach ($library['files']['php'] as $file_path => $array) {
+    $path = $library['library path'] . '/src/' . $file_path;
+    include_once($path);
+  }
+
+  // instantiate the sanitizer class
+  $sanitizer = new enshrined\svgSanitize\Sanitizer();
+  // run the svg through the sanitizer
+  $clean_svg = $sanitizer->sanitize($svg);
+
+  return $clean_svg;
+}
