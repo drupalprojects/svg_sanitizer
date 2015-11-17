@@ -13,13 +13,11 @@ define('SVG_SANITIZER_URL', 'https://github.com/darylldoyle/svg-sanitizer');
 function svg_sanitizer_libraries_info() {
   // This array key lets Libraries API search for 'sites/all/libraries/example'
   // directory, which should contain the entire, original extracted library.
-  $libraries['svg-sanitizer'] = array(
+  $libraries['svg_sanitizer'] = array(
     // Only used in administrative UI of Libraries API.
     'name' => 'SVG Sanitizer',
     'vendor url' => SVG_SANITIZER_URL,
     'download url' => SVG_SANITIZER_URL,
-    // Optional: Register files to auto-load for your module. All files must be
-    // keyed by module, and follow the syntax of the 'files' property.
     'path' => 'src',
     'files' => array(
       'php' => array(

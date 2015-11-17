@@ -9,7 +9,7 @@
  */
 function svg_sanitizer_requirements($phase) {
   if ($phase == 'runtime') {
-    $library = libraries_load('svg-sanitizer');
+    $library = libraries_load('svg_sanitizer');
     $t = get_t();
 
     if (empty($library['loaded'])) {

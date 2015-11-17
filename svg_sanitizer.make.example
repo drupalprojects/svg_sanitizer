@@ -5,7 +5,7 @@ api = "2"
 projects[drupal][version] = "7.x"
 
 ; SVG Sanitizer library location
-libraries[quojs][download][type] = "git"
-libraries[quojs][download][url] = "git://github.com/darylldoyle/svg-sanitizer.git"
-libraries[quojs][directory_name] = "svg-sanitizer"
-libraries[quojs][destination] = "libraries"
+libraries[svg-sanitizer][download][type] = "git"
+libraries[svg-sanitizer][download][url] = "git://github.com/darylldoyle/svg-sanitizer.git"
+libraries[svg-sanitizer][directory_name] = "svg_sanitizer"
+libraries[svg-sanitizer][destination] = "libraries"
