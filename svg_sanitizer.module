@@ -74,15 +74,6 @@ function svg_sanitizer_field_formatter_view($entity_type, $entity, $field, $inst
 }
 
 /**
- * Implements hook_page_build().
- */
-function svg_sanitizer_page_build(&$page) {
-  $svg = drupal_get_path('module', 'svg_sanitizer') . '/example.svg';
-  $dirty_svg = file_get_contents($svg);
-  $clean_svg = _svg_sanitizer_sanitize($dirty_svg);
-}
-
-/**
  * Simple API function which will generate an XLS file and
  * save it in $path.
  *
