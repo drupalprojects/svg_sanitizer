@@ -9,15 +9,16 @@ define('SVG_SANITIZER_URL', 'https://github.com/darylldoyle/svg-sanitizer');
 
 /**
  * Impliments hook_libraries_info
+ *
+ * Defines the svg_sanitizer library as well as loading the php files.
  */
 function svg_sanitizer_libraries_info() {
-  // This array key lets Libraries API search for 'sites/all/libraries/example'
-  // directory, which should contain the entire, original extracted library.
   $libraries['svg_sanitizer'] = array(
-    // Only used in administrative UI of Libraries API.
     'name' => 'SVG Sanitizer',
     'vendor url' => SVG_SANITIZER_URL,
     'download url' => SVG_SANITIZER_URL,
+    // manually setting the version because the library handles versioning
+    // via git tags.
     'version' => '0.x',
     'path' => 'src',
     'files' => array(
@@ -36,6 +37,8 @@ function svg_sanitizer_libraries_info() {
 
 /**
  * Implements hook_field_formatter_info().
+ *
+ * Define a new field formatter.
  */
 function svg_sanitizer_field_formatter_info() {
   return array(
@@ -48,6 +51,8 @@ function svg_sanitizer_field_formatter_info() {
 
 /**
  * Implements hook_field_formatter_view().
+ *
+ * Load the svg file and run in through the svg_sanitizer library.
  */
 function svg_sanitizer_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
   $element = array();
@@ -56,9 +61,11 @@ function svg_sanitizer_field_formatter_view($entity_type, $entity, $field, $inst
   switch ($display['type']) {
     case 'svg_sanitizer':
       foreach ($items as $delta => $item) {
-        // create 
+        // create the file path
         $svg_path = file_create_url($item['uri']);
+        // get the contents of the svg
         $svg = file_get_contents($svg_path);
+        // remove all of the bad stuff from the svg
         $svg_clean = _svg_sanitizer_sanitize($svg);
 
         $element[$delta] = array(
