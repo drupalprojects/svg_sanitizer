@@ -18,6 +18,7 @@ function svg_sanitizer_libraries_info() {
     'name' => 'SVG Sanitizer',
     'vendor url' => SVG_SANITIZER_URL,
     'download url' => SVG_SANITIZER_URL,
+    'version' => '0.x',
     'path' => 'src',
     'files' => array(
       'php' => array(
@@ -83,14 +84,8 @@ function svg_sanitizer_field_formatter_view($entity_type, $entity, $field, $inst
  *    contents.
  */
 function _svg_sanitizer_sanitize($svg) {
-  // @todo: I have to include the files here because they aren't being loaded
-  // in svg_sanitizer_libraries_info() for some reason
-  $library = libraries_load('svg-sanitizer');
-  foreach ($library['files']['php'] as $file_path => $array) {
-    $path = $library['library path'] . '/src/' . $file_path;
-    include_once($path);
-  }
-
+  // Load the svg_sanitizer library
+  $library = libraries_load('svg_sanitizer');
   // instantiate the sanitizer class
   $sanitizer = new enshrined\svgSanitize\Sanitizer();
   // run the svg through the sanitizer

@@ -26,7 +26,7 @@ function svg_sanitizer_requirements($phase) {
       return array(
         'phpexcel' => array(
           'title' => $t('SVG Sanitizer'),
-          'value' => $t('SVG Sanitizer installed'),
+          'value' => $t('SVG Sanitizer installed. This module has been tested against version 0.2.1'),
           'severity' => REQUIREMENT_OK,
         ),
       );
