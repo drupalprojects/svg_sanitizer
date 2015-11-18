@@ -7,6 +7,9 @@
 // svg_sanitizer global variables
 define('SVG_SANITIZER_URL', 'https://github.com/darylldoyle/svg-sanitizer');
 
+// Load the svg_sanitizer library
+libraries_load('svg_sanitizer');
+
 /**
  * Impliments hook_libraries_info
  *
@@ -91,12 +94,33 @@ function svg_sanitizer_field_formatter_view($entity_type, $entity, $field, $inst
  *    contents.
  */
 function _svg_sanitizer_sanitize($svg) {
-  // Load the svg_sanitizer library
-  $library = libraries_load('svg_sanitizer');
   // instantiate the sanitizer class
   $sanitizer = new enshrined\svgSanitize\Sanitizer();
+  // get newly defined attributes
+  $attributes = new SvgSanitizerAttributes();
+  $sanitizer->setAllowedAttrs($attributes);
   // run the svg through the sanitizer
   $clean_svg = $sanitizer->sanitize($svg);
 
   return $clean_svg;
+}
+
+
+/**
+ * Class SvgSanitizerAttributes
+ *
+ * Add custom attributes to the list of allowed attributes.
+ */
+class SvgSanitizerAttributes implements enshrined\svgSanitize\data\AttributeInterface {
+  /**
+   * Returns an array of attributes
+   *
+   * @return array
+   */
+  public static function getAttributes() {
+    $allowed = enshrined\svgSanitize\data\AllowedAttributes::getAttributes();
+    array_push($allowed, "viewBox");
+
+    return $allowed;
+  }
 }
