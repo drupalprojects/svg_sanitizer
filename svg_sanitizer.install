@@ -5,6 +5,20 @@
  */
 
 /**
+ * Implements hook_install().
+ */
+function svg_sanitizer_install() {
+  variable_set('svg_sanitizer_allowedattrs', array('viewBox'));
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function svg_sanitizer_uninstall() {
+  variable_del('svg_sanitizer_allowedattrs');
+}
+
+/**
  * Implements hook_requirements().
  */
 function svg_sanitizer_requirements($phase) {

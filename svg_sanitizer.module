@@ -39,6 +39,37 @@ function svg_sanitizer_libraries_info() {
 }
 
 /**
+ * Impliments hook_menu
+ *
+ * Admin Page
+ */
+function svg_sanitizer_menu() {
+  $items['admin/config/media/svg-sanitizer'] = array(
+    'title' => 'SVG Sanitizer',
+    'description' => 'Settings for the SVG Sanitizer library.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('svg_sanitizer_admin_config_form'),
+    'access arguments' => array('administer svg sanitizer'),
+    'file' => 'svg_sanitizer.admin.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function svg_sanitizer_permission() {
+  return array(
+    'administer svg sanitizer' =>  array(
+      'title' => t('Administer SVG Sanitizer'),
+      'description' => t('Manage the settings for the SVG Sanitizer library.'),
+    ),
+  );
+}
+
+/**
  * Implements hook_field_formatter_info().
  *
  * Define a new field formatter.
@@ -119,7 +150,11 @@ class SvgSanitizerAttributes implements enshrined\svgSanitize\data\AttributeInte
    */
   public static function getAttributes() {
     $allowed = enshrined\svgSanitize\data\AllowedAttributes::getAttributes();
-    array_push($allowed, "viewBox");
+    $custom_attributes = variable_get('svg_sanitizer_allowedattrs', NULL);
+
+    foreach ($custom_attributes as $attribute) {
+      array_push($allowed, $attribute);
+    }
 
     return $allowed;
   }
