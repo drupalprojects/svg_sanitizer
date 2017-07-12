@@ -18,7 +18,8 @@ use enshrined\svgSanitize\Sanitizer;
  *   label = @Translation("SVG Sanitizer"),
  *   description = @Translation("Makes the SVG Sanitizer library available to Drupal."),
  *   field_types = {
- *     "file"
+ *     "file",
+ *     "svg_icon",
  *   }
  * )
  */
