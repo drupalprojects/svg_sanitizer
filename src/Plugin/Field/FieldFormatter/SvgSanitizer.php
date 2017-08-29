@@ -44,10 +44,8 @@ class SvgSanitizer extends FormatterBase {
       if (!$item->entity) {
         continue;
       }
-      // Create the file path
-      $svg_path = file_create_url($item->entity->getFileUri());
       // Get the contents of the svg
-      $svg = file_get_contents($svg_path);
+      $svg = file_get_contents($item->entity->getFileUri());
       // Remove all of the bad stuff from the svg.
       $svg_clean = $this->sanitize($svg);
 
